@@ -6,6 +6,7 @@ import Ephemeris.Ephemeride;
 import Ephemeris.nprFile;
 import MathMatrix.Matrix;
 import Nmea.Datum;
+import Nmea.ENU;
 import Nmea.Spherical;
 import Nmea.Vector3;
 import Pseudorange.Measurements;
@@ -87,14 +88,15 @@ public class Lab5 {
 
 		System.out
 				.println("\n=== Exercise V.3 – Linearized Single Epoch LS Solution ===");
+		ArrayList<Matrix> hs = new ArrayList<Matrix>();
+		ArrayList<Matrix> zs = new ArrayList<Matrix>();
+		ArrayList<Matrix> xs = new ArrayList<Matrix>();
+		Measurements pseudorange = new Measurements();
+		Vector3 r1 = new Vector3(4918526.668d, -791212.115d, 3969767.140d,Datum.WGS84);
 		{
-			ArrayList<Matrix> hs = new ArrayList<Matrix>();
-			ArrayList<Matrix> zs = new ArrayList<Matrix>();
-			ArrayList<Matrix> xs = new ArrayList<Matrix>();
 			double offSet = 500 * Math.pow(10, -6);
 			double drift = 0.4 * Math.pow(10, -6);
-			Vector3 r1 = new Vector3(4918526.668d, -791212.115d, 3969767.140d,
-					Datum.WGS84);
+					
 			System.out.println("\nSat:");
 			for (Ephemeride e : file._ephemerides) {
 	            System.out.println("SVN"
@@ -110,7 +112,6 @@ public class Lab5 {
 			}
 					
 			int j = 0;
-			Measurements pseudorange = new Measurements();
 			for (Ephemeride e : file._ephemerides) {
 				for (int i = 0; i <= 3600; i++) {
 					if (hs.get(i)==null) {
@@ -160,16 +161,15 @@ public class Lab5 {
 			System.out.println("\nMatrix S:");
 			hs.get(0).transpose().times(hs.get(0)).inverse().show();
 			
-			System.out.println("\nDilution of precision (GPS)");
-			System.out.println("PDOP: " + pseudorange.calcPDOP(hs.get(0)));
-			System.out.println("GDOP: " + pseudorange.calcGDOP(hs.get(0)));
-			System.out.println("HDOP: " + pseudorange.calcHDOP(hs.get(0)));
-			System.out.println("VDOP: " + pseudorange.calcVDOP(hs.get(0)));
-			
 		}
 
 		System.out
 				.println("\n=== Exercise V.4 - Dilution Of Precision (DOP) ===");
+		
+		System.out.println("PDOP: " + pseudorange.calcPDOP(hs.get(0)));
+		System.out.println("GDOP: " + pseudorange.calcGDOP(hs.get(0)));
+		System.out.println("HDOP: " + pseudorange.calcHDOP(hs.get(0),r1));
+		System.out.println("VDOP: " + pseudorange.calcVDOP(hs.get(0),r1));
 		{
 
 		}

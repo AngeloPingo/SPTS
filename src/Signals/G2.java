@@ -1,11 +1,13 @@
 package Signals;
 
-public class G2 extends CACode{
+public class G2{
+	
+	int [] stageNumbers = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 	public G2() {
 	}
 	
-	public G2 generateNext() {
+	public void generateNext() {
 		int [] copyStageNumbers = stageNumbers.clone();
 		int stageNumbers1 = stageNumbers[1];
 		int stageNumbers2 = stageNumbers[2];
@@ -17,11 +19,17 @@ public class G2 extends CACode{
 		
 		stageNumbers[0] = newStageNumber0;
 		
-		for (int i = 0; i < stageNumbers.length; i++) {
+		for (int i = 0; i < stageNumbers.length - 1; i++) {
 			stageNumbers[i + 1] = copyStageNumbers[i];
 		}
-		
-		return this;
 	}
-
+	
+	public int output() {
+		return stageNumbers[stageNumbers.length - 1];
+	}
+	
+	public int getStageNumber(int index) {
+		return stageNumbers[index-1];
+	}
+	
 }

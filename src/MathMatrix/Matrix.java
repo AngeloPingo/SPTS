@@ -43,7 +43,7 @@ final public class Matrix {
     }
 
     // swap rows i and j
-    private void swap(int i, int j) {
+    public void swap(int i, int j) {
         double[] temp = data[i];
         data[i] = data[j];
         data[j] = temp;
@@ -111,7 +111,7 @@ final public class Matrix {
     // return C = A * B
     public Matrix times(Matrix B) {
         Matrix A = this;
-        if (A.N != B.M) throw new RuntimeException("Illegal matrix dimensions.");
+        if (A.N != B.M) throw new RuntimeException("Illegal matrix dimensions" +A.M+"x"+A.N+ " " +B.M+"x"+B.N+".");
         Matrix C = new Matrix(A.M, B.N);
         for (int i = 0; i < C.M; i++)
             for (int j = 0; j < C.N; j++)
@@ -170,6 +170,16 @@ final public class Matrix {
 		return mat;
 	}
     
+    public Matrix createSubMatrixInf(int excluding_rows, int excluding_cols) {
+		Matrix mat = new Matrix(excluding_rows, excluding_cols);
+		for (int i=0;i<excluding_rows;i++) {
+			for (int j=0;j<excluding_cols;j++) {
+				mat.setValueAt(i, j, this.getValueAt(i, j));
+			}
+		}
+		return mat;
+	}
+    
     public double trace(int inicial, int end) {
     	double result = 0;
     	for (int i = inicial-1; i < end; i++) {
@@ -192,7 +202,7 @@ final public class Matrix {
 		return mat;
 	}
     
-    private static int changeSign(int i) {
+    public static int changeSign(int i) {
 		if (i%2==0)
 			return 1;
 		return -1;
@@ -201,27 +211,27 @@ final public class Matrix {
     public void setValueAt(int row, int col, double value) {
 		data[row][col] = value;
 	}
+    
+    public double getValueAt(int row, int col) {
+		return data[row][col];
+	}
 
-	private int getNrows() {
+    public int getNrows() {
 		return this.M;
 	}
 
-	private boolean isSquare() {
+    public boolean isSquare() {
     	if (this.M==this.N) {
     		return true;
     	}
 		return false;
 	}
 
-	private int getNcols() {
+    public int getNcols() {
 		return this.N;
 	}
 
-	private double getValueAt(int i, int j) {
-		return this.data[i][j];
-	}
-
-	private int size() {
+    public int size() {
 		return this.M*this.N;
 	}
 

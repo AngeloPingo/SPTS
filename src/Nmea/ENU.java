@@ -30,7 +30,7 @@ public class ENU {
 		
 		Vector3D v = to.subtract(from);
 		Vector3D res =rot_z.applyTo(rot_x).applyInverseTo(v);
-	//	System.out.println(res);
+//		System.out.println(res);
 
 		
 		E=res.getX();
