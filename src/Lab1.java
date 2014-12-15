@@ -95,8 +95,8 @@ public class Lab1 {
 					maxLong = gga.getSpherical().getLongitude();
 			}
 		}
-		Spherical min = new Spherical(minLat, minLong, 0.0d, Datum.None);
-		Spherical max = new Spherical(maxLat, maxLong, 0.0d, Datum.None);
+		Spherical min = new Spherical(minLat, minLong, 0.0d, Datum.WGS84);
+		Spherical max = new Spherical(maxLat, maxLong, 0.0d, Datum.WGS84);
 
 		System.out.println("Min: " + min.toSphericalDM().toString());
 		System.out.println("Max: " + max.toSphericalDM().toString());

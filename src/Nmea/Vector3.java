@@ -55,7 +55,7 @@ public class Vector3 extends Vector3D {
 			System.out.println("R = " + R);
 		}
 		
-		return new Spherical(phi, lambda, h, Datum.None);
+		return new Spherical(phi, lambda, h, datum);
 	}
 	
 	private double getLambda(){
@@ -117,7 +117,7 @@ public class Vector3 extends Vector3D {
 			System.out.println("z0 = " + z0);
 		}
 		
-		return new Spherical(phi, lambda, h, Datum.None);
+		return new Spherical(phi, lambda, h, datum);
 	}
 	
 	public static double distance(Vector3 a, Vector3 b){

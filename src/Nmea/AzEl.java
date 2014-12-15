@@ -18,4 +18,7 @@ public class AzEl {
 	public String toString(){
 		return "{az = "+Math.toDegrees(Azimuth)+"º "+ " | el = " + Math.toDegrees(Elevation)+"º}";
 	}
+	
+
+	
 }

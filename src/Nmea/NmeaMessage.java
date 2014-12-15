@@ -24,7 +24,7 @@ public class NmeaMessage {
 			checksum = checksum ^ line.charAt(i); 
 		}
 		if(_checkSum!=checksum)
-			System.out.print("Checksum error at " + line);
+			System.out.println("Checksum error at " + line);
 		else
 			_valid = true;
 	

@@ -71,6 +71,9 @@ public class NmeaFile {
 		}
 
 	}
+
+	
+	
 	
 	public double cumulativeDistance(){
 		Vector3 old = null;

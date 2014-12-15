@@ -13,6 +13,10 @@ public class Spherical {
 		normalize();
 	}
 
+	public void addAltitude(Double altitude) {
+		this.altitude += altitude;
+	}
+
 	public Double getLatitude() {
 		return latitude;
 	}
@@ -69,9 +73,15 @@ public class Spherical {
 	}
 
 	public String toString() {
-		return "{" + latitude + "rad " + (latitude >= 0 ? "N" : "S") + " "
-				+ longitude + "rad " + (longitude >= 0 ? "E" : "W") + " "
-				+ altitude + "m}";
+		return "{" + latitude + "rad " + " "	
+				   + longitude + "rad " + " "
+				   + altitude + "m}";
+	}
+	
+	public String toString2() {
+		return "{" + Math.abs(latitude) + "rad " + (latitude >= 0 ? "N" : "S") + " "	
+				   + Math.abs(longitude) + "rad " + (longitude >= 0 ? "E" : "W") + " "
+				   + altitude + "m}";
 	}
 
 	public Spherical toDatum(Datum dat) {
@@ -106,20 +116,15 @@ public class Spherical {
 				+ dat.deltaZ * Math.sin(phi) - dat.deltaA * a / RN
 				+ dat.deltaF * b * RN * sin_phi_2 / a;
 
-		System.out.println("RN = " + RN + "m");
-		System.out.println("RM = " + RM + "m");
+//		System.out.println("RN = " + RN + "m");
+//		System.out.println("RM = " + RM + "m");
 		// System.out.println("phi = " + phi);
 		// System.out.println("lambda = " + lambda);
 		// System.out.println("h = " + h);
 
-		// System.out.println("delta_phi = " + delta_phi);
-		// System.out.println("delta_lambda = " + delta_lambda);
-		// System.out.println("delta_h = " + delta_h);
 		Spherical delta = new Spherical(delta_phi, delta_lambda, delta_h,dat);
-		System.out.println("delta=" + delta.toSphericalDMS().toString());
-
+//		System.out.println("delta=" + delta.toSphericalDMS().toString());
 		return new Spherical(latitude + delta_phi, longitude+ delta_lambda, altitude + delta_h,dat);
-	
 	}
 
 

@@ -34,22 +34,6 @@ public class Tools {
 
 	}
 	
-	public static double EccentricAnomaly(double e, double M){
-		double E = M;
-		double Eline = 0;
-		double delta = Math.pow(10, -12);
-		int i = 0;
-
-		
-		while (!(Math.abs(E-Eline) < delta)) {
-			Eline = E;
-			E = M + e*Math.sin(E);
-			i++;
-		}
-		System.out.println(i + " iterações.");
-		return E;
-	}
-	
 	
 
 	

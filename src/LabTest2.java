@@ -7,68 +7,20 @@ import Ephemeris.EphFile;
 import Ephemeris.Ephemeride;
 import Ephemeris.Orbital;
 import Nmea.AzEl;
+import Nmea.CardialLatitude;
+import Nmea.CardialLongitude;
 import Nmea.Datum;
 import Nmea.ENU;
+import Nmea.SphericalDMS;
 import Nmea.Vector3;
 
-public class Lab3 {
+public class LabTest2 {
 
     public static void main(String[] args) {
-        System.out.println("\n=== EXERCISE IV.1 ===");
-        Orbital sat = new Orbital(26559755d, 0.017545d, 1.626021d);
-        System.out.println("a) T=" + sat.OrbitalPeriod());
-        System.out.println("b) n=" + sat.MeanAngularVelocity());
-        System.out.println("c) M=" + sat.MeanAnomaly(39929d));
-        System.out.println("d) E=" + sat.EccentricAnomaly(39929d, 7));
-        System.out.println("e) (r0,phi0)=" + "[" + sat.EllipseEquation(39929d)
-                + "," + sat.TrueAnomaly(39929d) + "]");
-        System.out.println("f) phi=" + sat.LatitudeArgument(39929d));
-
-
-        System.out.println("\n=== EXERCISE IV.2 ===");
-        EphFile file = new EphFile("ephemerides.eph");
-        for (Ephemeride e : file._ephemerides) {
-            System.out.println("SVN"
-                    + e.SV
-                    + " "
-                    + e.toWGS84(e.toTime(213984, 1693), false, false)
-                            .toString());
-
-        }
-
+     
+        EphFile file = new EphFile("wa2.eph");
         Vector3 receiver = new Vector3(4918526.668d, -791212.115d,
                 3969767.140d, Datum.WGS84);
-
-        System.out.println("\n=== EXERCISE IV.3 ===");
-        for (Ephemeride e : file._ephemerides) {
-            System.out.println("SVN"
-                    + e.SV
-                    + " "
-                    + e.toWGS84(e.toTime(213984, 1693), receiver, false)
-                            .toString());
-        }
-
-        System.out.println("\n=== EXERCISE IV.4 ===");
-        for (Ephemeride e : file._ephemerides) {
-            Vector3 sattellite = e.toWGS84(e.toTime(213984, 1693), receiver,
-                    false);
-            System.out.println("SVN" + e.SV + " WGS84: "
-                    + new Vector3(sattellite.subtract(receiver)).toCosines());
-            System.out.println("SVN" + e.SV + " ENU  : "
-                    + new ENU(receiver, sattellite).normalize().toString());
-            System.out.println();
-        }
-
-        System.out.println("\n=== EXERCISE IV.5 ===");
-        for (Ephemeride e : file._ephemerides) {
-            Vector3 sattellite = e.toWGS84(e.toTime(213984, 1693), receiver,
-                    false);
-            
-            AzEl azel =new AzEl(receiver, sattellite);
-            
-            System.out.println("SVN" + e.SV + " " + azel.toString());
-        }
-
         System.out.println("\n=== EXERCISE V.1 ===");
         for (Ephemeride e : file._ephemerides) {
             e.above = true;
@@ -94,12 +46,10 @@ public class Lab3 {
                     for (int i = 0; i < 3; ++i) {
                         double T0 = e.toTime(213984, 1693) + i;
                         Vector3D sattellite = e.toWGS84(T0, receiver, false);
-
                         System.out
                                 .print("\t"
                                         + new BigDecimal(sattellite
                                                 .distance(receiver)));
-
                     }
                     System.out.println();
                 }
@@ -131,7 +81,7 @@ public class Lab3 {
             }
         }
         
-        System.out.println("\n=== EXERCISE PLANES ===");
+        System.out.println("\n=== EXERCISE 1a ===");
         for (Ephemeride e1 : file._ephemerides) {
             Vector3 e1_normal = e1.getNormal(-e1.toe, false);
         	for (Ephemeride e2 : file._ephemerides) {
@@ -144,13 +94,12 @@ public class Lab3 {
             }
         }
         
+        System.out.println("\n=== EXERCISE 1b ===");
         HashSet<Ephemeride> groupedSVs= new HashSet<Ephemeride>();
-        
-        
-        System.out.println("\n=== INCLINATION PLANES ===");
         for (Ephemeride e1 : file._ephemerides) {
         	if(!groupedSVs.contains(e1)){
 	            for (Ephemeride e2 : file._ephemerides) {
+	                
 	        		if(!e1.equals(e2)){
 	                	if(e1.samePlane(e2)){
 	                		groupedSVs.add(e2);
@@ -159,6 +108,52 @@ public class Lab3 {
 	                }
 	            }
         	}
+        }    
+        
+        System.out.println("\n=== EXERCISE 2 ===");
+        for (Ephemeride e1 : file._ephemerides) {
+        	if(e1.SV == 2) {
+        		System.out.println(e1.toWGS84(e1.toTime(0, 1765), true, true));
+        	}
+        }    
+
+        System.out.println("\n=== EXERCISE 3 ===");
+        for (Ephemeride e1 : file._ephemerides) {
+        	if(e1.SV == 2) {
+        		e1.getLastPerigeePassage(0,1765,0);
+        	}
+        }
+        System.out.println("\n=== EXERCISE 4 ===");
+        SphericalDMS receptorDMS = new SphericalDMS(38, 44, 15.58d, CardialLatitude.N, 9, 8, 18.67d, CardialLongitude.W, 199.5d, Datum.WGS84);
+        
+        Vector3 receptor = receptorDMS.toSpherical().toVector3();
+        System.out.println(receptorDMS);
+        System.out.println(receptorDMS.toSphericalDM());
+        System.out.println(receptorDMS.toSphericalD());
+        System.out.println(receptorDMS.toSpherical());
+        System.out.println(receiver);
+        System.out.println("\n=== EXERCISE 4a ===");
+
+        for (Ephemeride e1 : file._ephemerides) {
+        	if(e1.SV == 17) {
+        		System.out.println("satellite = "+ e1.toWGS84(e1.toTime(0, 1765), true,false));
+        	}
         }        
+        System.out.println("\n=== EXERCISE 4b ===");
+        for (Ephemeride e1 : file._ephemerides) {
+        	if(e1.SV == 17) {
+        		System.out.println("satellite = "+ e1.toWGS84(e1.toTime(0, 1765), receiver, false));
+        	}
+        }        
+        
+        
+        System.out.println("\n=== EXERCISE 5 ===");
+        for (Ephemeride e1 : file._ephemerides) {
+        	if(e1.SV == 17) {
+        	System.out.println("highest latitude = "+ e1.getHeighestLatitude());
+        	}
+        }        
+    
     }
+
 }

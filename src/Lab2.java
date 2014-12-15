@@ -10,7 +10,7 @@ public class Lab2 {
 
 	public static void ExII1() {
 		SphericalDMS point = new SphericalDMS(38, 46, 49.61d,
-				CardialLatitude.N, 9, 29, 56.19d, CardialLongitude.W, 103d, Datum.None);
+				CardialLatitude.N, 9, 29, 56.19d, CardialLongitude.W, 103d, Datum.WGS84);
 		System.out.println("\n=== EXERCISE II.1.a ===");
 		System.out.println(point.toSphericalDM().toString());
 		System.out.println("\n=== EXERCISE II.1.b ===");
@@ -19,13 +19,13 @@ public class Lab2 {
 
 	public static void ExII2() {
 		SphericalDMS point = new SphericalDMS(38, 46, 49.61d,
-				CardialLatitude.N, 9, 29, 56.19d, CardialLongitude.W, 103d, Datum.None);
+				CardialLatitude.N, 9, 29, 56.19d, CardialLongitude.W, 103d, Datum.WGS84);
 		System.out.println("\n=== EXERCISE II.2 ===");
 		System.out.println(point.toSpherical().toVector3().toString());
 	}
 
 	public static void ExII3() {
-		Vector3 vec = new Vector3(4910384.3d, -821478.6d, 3973549.6d, Datum.None);
+		Vector3 vec = new Vector3(4910384.3d, -821478.6d, 3973549.6d, Datum.WGS84);
 
 		System.out.println("\n=== EXERCISE II.3 ===");
 		System.out.println("\napproximate solution");
@@ -44,8 +44,8 @@ public class Lab2 {
 	public static void ExII4() {
 		System.out.println("\n=== EXERCISE II.4 ===");
 		SphericalDMS p1 = new SphericalDMS(38, 46, 49.61d, CardialLatitude.N,
-				9, 29, 56.19d, CardialLongitude.W, 103d, Datum.None);
-		Vector3 p2 = new Vector3(4910384.3d, -821478.6d, 3973549.6d, Datum.None);
+				9, 29, 56.19d, CardialLongitude.W, 103d, Datum.WGS84);
+		Vector3 p2 = new Vector3(4910384.3d, -821478.6d, 3973549.6d, Datum.WGS84);
 		System.out.println("distance = "
 				+ Vector3.distance(p1.toSpherical().toVector3(), p2) + "m");
 	}
@@ -55,14 +55,14 @@ public class Lab2 {
 
 		System.out.println("\n\ta)");
 		Spherical p1 = new SphericalDMS(38, 46, 49.61d, CardialLatitude.N, 9,
-				29, 56.19d, CardialLongitude.W, 103d, Datum.None).toSpherical();
+				29, 56.19d, CardialLongitude.W, 103d, Datum.WGS84).toSpherical();
 		Spherical newP1 = p1.toDatum(Datum.European1950);
 		System.out.println(newP1.toSphericalD().toString());
 		System.out.println(newP1.toSphericalDM().toString());
 		System.out.println(newP1.toSphericalDMS().toString());
 
 		System.out.println("\n\tb)");
-		Spherical p2 = new Vector3(4910384.3d, -821478.6d, 3973549.6d, Datum.None)
+		Spherical p2 = new Vector3(4910384.3d, -821478.6d, 3973549.6d, Datum.WGS84)
 				.toSphericalH(false);
 		Spherical newP2 = p2.toDatum(Datum.European1950);
 		System.out.println(newP2.toSphericalD().toString());
@@ -79,6 +79,18 @@ public class Lab2 {
 		System.out.println("p1ED50 = "+p1ed50.toString());
 		System.out.println(p1ed50.distance(p1ed50molod));
 	
+		
+		
+		Spherical sph = p1ed50.toDatum(Datum.European1950.invert()).toSphericalH(false);
+		Spherical sph2 = p1ed50.toSphericalH(false).toDatum(Datum.European1950.invert());
+
+
+		System.out.println("invert = "+sph.toSphericalDMS().toString());
+		System.out.println("invert = "+sph2.toSphericalDMS().toString());
+
+		System.out.println("origin = "+p1.toSphericalDMS().toString());
+		System.out.println("origin = "+p1.toDatum(Datum.European1950).toDatum(Datum.European1950.invert() ).toSphericalDMS().toString() );
+		
 	}
 
 	
@@ -89,10 +101,10 @@ public class Lab2 {
 	public static void ExII6() {
 		System.out.println("\n=== EXERCISE II.6 ===");
 		SphericalDMS p1s = new SphericalDMS(38, 46, 49.61d, CardialLatitude.N,
-				9, 29, 56.19d, CardialLongitude.W, 103d, Datum.None);
+				9, 29, 56.19d, CardialLongitude.W, 103d, Datum.WGS84);
 
 		Vector3 p1 = p1s.toSpherical().toVector3();
-		Vector3 p2 = new Vector3(4910384.3d, -821478.6d, 3973549.6d, Datum.None);
+		Vector3 p2 = new Vector3(4910384.3d, -821478.6d, 3973549.6d, Datum.WGS84);
 
 		System.out.println("p2-p1 = " + p2.subtract(p1).toString());
 		System.out.println(p1.toENU(p2).toString());
@@ -102,9 +114,9 @@ public class Lab2 {
 	public static void ExII7() {
 		System.out.println("\n=== EXERCISE II.7 ===");
 		Spherical p1 = new SphericalDM(40, 45d, CardialLatitude.N, 73, 58d,
-				CardialLongitude.W, 6378000d, Datum.None).toSpherical();
+				CardialLongitude.W, 6378000d, Datum.WGS84).toSpherical();
 		Spherical p2 = new SphericalDM(51, 32d, CardialLatitude.N, 0, 10d,
-				CardialLongitude.W, 6378000d, Datum.None).toSpherical();
+				CardialLongitude.W, 6378000d, Datum.WGS84).toSpherical();
 		p1.distanceOrthodrome(p2);
 	}
 
@@ -113,11 +125,11 @@ public class Lab2 {
 		System.out.println("\n=== EXERCISE ORTHO ===");
 
 		Spherical p1 = new SphericalDMS(38, 39, 38, CardialLatitude.N, 9, 17,
-				56, CardialLongitude.W, 6378000d, Datum.None).toSpherical();
+				56, CardialLongitude.W, 6378000d, Datum.WGS84).toSpherical();
 		Spherical p2 = new SphericalDMS(38, 41, 56, CardialLatitude.S, 38, 28,
-				56, CardialLongitude.W, 6378000d, Datum.None).toSpherical();
+				56, CardialLongitude.W, 6378000d, Datum.WGS84).toSpherical();
 		Spherical c = new SphericalDMS(0, 0, 0, CardialLatitude.N, 0, 0, 0,
-				CardialLongitude.W, 6378000d, Datum.None).toSpherical();
+				CardialLongitude.W, 6378000d, Datum.WGS84).toSpherical();
 		c.setLatitude((p1.getLatitude() + p2.getLatitude()) / 2f);
 		c.setLongitude((p1.getLongitude() + p2.getLongitude()) / 2f);
 
@@ -130,13 +142,13 @@ public class Lab2 {
 		System.out.println("\n=== EXERCISE MOLOD ===");
 
 		Spherical p1 = new SphericalDMS(38, 44, 30, CardialLatitude.N, 9, 18,
-				50, CardialLongitude.W, 100, Datum.None).toSpherical();
+				50, CardialLongitude.W, 100, Datum.WGS84).toSpherical();
 		Spherical p2 = new SphericalDMS(38, 42, 40, CardialLatitude.N, 9, 8, 0,
-				CardialLongitude.W, 100, Datum.None).toSpherical();
+				CardialLongitude.W, 100, Datum.WGS84).toSpherical();
 
 		// XXX: WTF???
 		Spherical c = new SphericalDMS(0, 0, 0, CardialLatitude.N, 0, 0, 0,
-				CardialLongitude.W, 100, Datum.None).toSpherical();
+				CardialLongitude.W, 100, Datum.WGS84).toSpherical();
 
 		c.setLatitude((p1.getLatitude() + p2.getLatitude()) / 2);
 		c.setLongitude((p1.getLongitude() + p2.getLongitude()) / 2);

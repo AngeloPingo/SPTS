@@ -41,7 +41,7 @@ public class NmeaGGA extends NmeaMessage{
 
 		
 		SphericalDM sp = new SphericalDM(latDD, latMM, cLat, 
-										 lonDD, lonMM, cLon, _geoidHeight + _altitude, Datum.None);
+										 lonDD, lonMM, cLon, _geoidHeight + _altitude, Datum.WGS84);
 		_spherical = sp.toSpherical();
 		
 	/*	getSpherical() = new Spherical(
