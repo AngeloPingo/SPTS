@@ -5,9 +5,12 @@ import Ephemeris.EphFile;
 import Ephemeris.Ephemeride;
 import Ephemeris.nprFile;
 import MathMatrix.Matrix;
+import Nmea.CardialLatitude;
+import Nmea.CardialLongitude;
 import Nmea.Datum;
 import Nmea.ENU;
 import Nmea.Spherical;
+import Nmea.SphericalDMS;
 import Nmea.Vector3;
 import Pseudorange.Measurements;
 
@@ -93,6 +96,8 @@ public class Lab5 {
 		ArrayList<Matrix> xs = new ArrayList<Matrix>();
 		Measurements pseudorange = new Measurements();
 		Vector3 r1 = new Vector3(4918526.668d, -791212.115d, 3969767.140d,Datum.WGS84);
+		Vector3 r3 = new SphericalDMS(38, 44, 12.46d, CardialLatitude.N,
+				9, 8, 18.91d, CardialLongitude.W, 102d, Datum.WGS84).toSpherical().toVector3();
 		{
 			double offSet = 500 * Math.pow(10, -6);
 			double drift = 0.4 * Math.pow(10, -6);
@@ -113,7 +118,7 @@ public class Lab5 {
 					
 			int j = 0;
 			for (Ephemeride e : file._ephemerides) {
-				for (int i = 0; i <= 3600; i++) {
+				for (int i = 0; i <= 1; i++) {
 					if (hs.get(i)==null) {
 						hs.add(i, new Matrix(file._ephemerides.size(),4));
 					}
@@ -121,9 +126,8 @@ public class Lab5 {
 						zs.add(i, new Matrix(file._ephemerides.size(),1));
 					}
 					Spherical LLHSatNewAltitude = e.toWGS84(e.toTime(213984+i, 1693), r1, false).toSphericalH(false).toDatum(Datum.WGS84);
-//					LLHSatNewAltitude.addAltitude((offSet ) * 299792458); //+ i * drift
 					Vector3 LLHSat = LLHSatNewAltitude.toVector3();
-					pseudorange.createE0(LLHSat, r1);
+					pseudorange.createE0(LLHSat, r3);
 					double[] hVector = new double[4];
 					hVector[0] = -1*pseudorange.getE0s().getX();
 					hVector[1] = -1*pseudorange.getE0s().getY();

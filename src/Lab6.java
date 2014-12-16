@@ -31,10 +31,30 @@ public class Lab6 {
 		CACode caCode2 = new CA2();
 		System.out.println(caCode2.toString());
 		
+		System.out.println("caCode1.autocorrelation(caCode2):");
+		System.out.println(caCode1.autocorrelation(caCode2));
+		
+		System.out.println("\nC/A 2 (shift left):");
+		caCode2.shiftLeft(2);
+		System.out.println("INICIO");
+		System.out.println(caCode2.toString().length());
+		System.out.println(caCode2.toString());
+		System.out.println("FIM");
+		
+		System.out.println("\nC/A 2(shift right):");
+		CACode caCode3 = new CA2();
+		caCode3.shiftRight();
+		System.out.println(caCode3.toString());
+		
 		System.out.println("\nC/A 1 (Level -1 to 1):");
 		caCode1.convertLevelsOnes();
 		System.out.println(caCode1.toString());
-		caCode1.convertLevelsOnes();
+		
+		System.out.println("caCode1.autocorrelation(caCode2):");
+		System.out.println(caCode1.autocorrelation(caCode2));
+		
+		System.out.println("caCode1.autocorrelation(caCode1):");
+		System.out.println(caCode1.autocorrelation(caCode1));
 
 	}
 
