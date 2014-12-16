@@ -1,5 +1,14 @@
+import Ephemeris.camixRead;
 import Signals.CA1;
+import Signals.CA10;
 import Signals.CA2;
+import Signals.CA3;
+import Signals.CA4;
+import Signals.CA5;
+import Signals.CA6;
+import Signals.CA7;
+import Signals.CA8;
+import Signals.CA9;
 import Signals.CACode;
 import Signals.G1;
 import Signals.G2;
@@ -55,6 +64,41 @@ public class Lab6 {
 		
 		System.out.println("caCode1.autocorrelation(caCode1):");
 		System.out.println(caCode1.autocorrelation(caCode1));
+		
+		camixRead camix = new camixRead("camix.txt");
+		CACode camixCA = camix.getCAFile();
+		
+		System.out.println("\nVerificar CA1: ");
+		caCode1 = new CA1();
+		caCode1.crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA2: ");
+		caCode2 = new CA2();
+		caCode2.crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA3: ");
+		(new CA3()).crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA4: ");
+		(new CA4()).crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA5: ");
+		(new CA5()).crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA6: ");
+		(new CA6()).crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA7: ");
+		(new CA7()).crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA8: ");
+		(new CA8()).crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA9: ");
+		(new CA9()).crossCorrelation(camixCA);
+		
+		System.out.println("\nVerificar CA10: ");
+		(new CA10()).crossCorrelation(camixCA);
 
 	}
 

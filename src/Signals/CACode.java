@@ -104,4 +104,63 @@ public abstract class CACode {
 		return soma;
 	}
 	
+	public boolean crossCorrelation(CACode[] cas) {
+		int numCas = cas.length;
+		CAGeneric somaCA = new CAGeneric();
+		int somaTem = 0;
+		int numChips;
+		int soma = 0;
+		
+		for (int i = 0; i<numCas; i++) {
+			if (!cas[i].levelOnes) {
+				cas[i].convertLevelsOnes();
+			}
+		}
+		
+		for (int i = 0; i < this.stageNumbers.length; i++) {
+			for (int j = 0; j<numCas; j++) {
+				somaTem += cas[j].getStageNumbers()[i];
+			}
+			somaCA.setStageNumber(i,somaTem);
+			somaTem = 0;
+		}
+		
+		for (numChips = 0; numChips < this.stageNumbers.length; numChips++) {
+			for (int i = 0; i < this.stageNumbers.length; i++) {
+				soma += this.getStageNumbers()[i] * somaCA.getStageNumbers()[i];
+//				System.out.println("Code 1: " + this.stageNumbers[i] + ";  Code 2: " + ca.getStageNumbers()[i] + ";  Soma: " + soma);
+			}
+			if (soma > 500) {
+				System.out.println("Deslocacoes para a direita: " + numChips);
+				return true;
+			}
+			somaCA.shiftRight();
+		}
+		System.out.println("Deslocacoes para a direita: " + soma);
+		return false;
+	}
+	
+	public void crossCorrelation(CACode cas) {
+		int numChips;
+		int soma = 0;
+		int max = 0;
+		
+		if (!cas.levelOnes) {
+			cas.convertLevelsOnes();
+		}
+		
+		for (numChips = 0; numChips < this.stageNumbers.length; numChips++) {
+			for (int i = 0; i < this.stageNumbers.length; i++) {
+				soma += this.getStageNumbers()[i] * cas.getStageNumbers()[i];
+			}
+			if (soma > 150) {
+				System.out.println("Soma: " + soma + ";  Deslocacoes para a direita(n+delta): " + numChips + ";  Deslocacoes para a esquerda (n-delta): " + (this.stageNumbers.length - numChips));
+			}
+			if (max < soma) max = soma;
+			soma = 0;
+			cas.shiftRight();
+		}
+		System.out.println("Soma maxima: " + max);
+	}
+	
 }
