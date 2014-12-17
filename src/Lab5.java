@@ -117,8 +117,10 @@ public class Lab5 {
 			}
 					
 			int j = 0;
+			pseudorange.createMatrixs(file._ephemerides.size());
 			for (Ephemeride e : file._ephemerides) {
-				for (int i = 0; i <= 1; i++) {
+				int i = 0;
+//				for (int i = 0; i <= 1; i++) {
 					if (hs.get(i)==null) {
 						hs.add(i, new Matrix(file._ephemerides.size(),4));
 					}
@@ -128,52 +130,54 @@ public class Lab5 {
 					Spherical LLHSatNewAltitude = e.toWGS84(e.toTime(213984+i, 1693), r1, false).toSphericalH(false).toDatum(Datum.WGS84);
 					Vector3 LLHSat = LLHSatNewAltitude.toVector3();
 					pseudorange.createE0(LLHSat, r3);
-					double[] hVector = new double[4];
-					hVector[0] = -1*pseudorange.getE0s().getX();
-					hVector[1] = -1*pseudorange.getE0s().getY();
-					hVector[2] = -1*pseudorange.getE0s().getZ();
-					hVector[3] = 1d;
-					hs.get(i).addVector(hVector, j);
+					double ro = fileNpr._nprs.get(j).get(i);
+					pseudorange.measurementMatrix(j, ro, LLHSat);
+//					double[] hVector = new double[4];
+//					hVector[0] = -1*pseudorange.getE0s().getX();
+//					hVector[1] = -1*pseudorange.getE0s().getY();
+//					hVector[2] = -1*pseudorange.getE0s().getZ();
+//					hVector[3] = 1d;
+//					hs.get(i).addVector(hVector, j);
 					
-					double[] zVector = new double[1];
-					zVector[0] = fileNpr._nprs.get(j).get(i)-pseudorange.getE0s().dotProduct(LLHSat);
-					zs.get(i).addVector(zVector, j);
-				}
+//					double[] zVector = new double[1];
+//					zVector[0] = fileNpr._nprs.get(j).get(i)-pseudorange.getE0s().dotProduct(LLHSat);
+//					zs.get(i).addVector(zVector, j);
+//				}
 				j++;
 			}
 			
 			for(int i = 0; i<=3600; i++) {
 				Matrix x = new Matrix(4,1);
-				Matrix hi = hs.get(i);
-				Matrix zi = zs.get(i);
-				x = pseudorange.LeastSquares(hi, zi);
+//				Matrix hi = hs.get(i);
+//				Matrix zi = zs.get(i);
+				x = pseudorange.LeastSquares();
 				xs.add(i, x);
 			}
 			
 			for(int i = 0; i<2; i++) {
 				System.out.println("\n----  Iteration:" + i + "  ----");
 				System.out.println("\nMatrix H:");
-				hs.get(i).show();
+				pseudorange.getH().show();
 				System.out.print("\n");
 				System.out.println("\nMatrix Z:");
-				zs.get(i).show();
+				pseudorange.getZ().show();
 				System.out.print("\n");
 				System.out.println("\nMatrix x:");
-				xs.get(i).transpose().show();
+				pseudorange.getX().transpose().show();
 			}
 			
 			System.out.println("\nMatrix S:");
-			hs.get(0).transpose().times(hs.get(0)).inverse().show();
+			pseudorange.getS().show();
 			
 		}
 
 		System.out
 				.println("\n=== Exercise V.4 - Dilution Of Precision (DOP) ===");
 		
-		System.out.println("PDOP: " + pseudorange.calcPDOP(hs.get(0)));
-		System.out.println("GDOP: " + pseudorange.calcGDOP(hs.get(0)));
-		System.out.println("HDOP: " + pseudorange.calcHDOP(hs.get(0),r1));
-		System.out.println("VDOP: " + pseudorange.calcVDOP(hs.get(0),r1));
+		System.out.println("PDOP: " + pseudorange.calcPDOP(pseudorange.getH()));
+		System.out.println("GDOP: " + pseudorange.calcGDOP(pseudorange.getH()));
+		System.out.println("HDOP: " + pseudorange.calcHDOP(pseudorange.getH(),r1));
+		System.out.println("VDOP: " + pseudorange.calcVDOP(pseudorange.getH(),r1));
 		{
 
 		}
