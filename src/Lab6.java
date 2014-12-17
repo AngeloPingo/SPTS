@@ -69,12 +69,10 @@ public class Lab6 {
 		CACode camixCA = camix.getCAFile();
 		
 		System.out.println("\nVerificar CA1: ");
-		caCode1 = new CA1();
-		caCode1.crossCorrelation(camixCA);
+		(new CA1()).crossCorrelation(camixCA);
 		
 		System.out.println("\nVerificar CA2: ");
-		caCode2 = new CA2();
-		caCode2.crossCorrelation(camixCA);
+		(new CA2()).crossCorrelation(camixCA);
 		
 		System.out.println("\nVerificar CA3: ");
 		(new CA3()).crossCorrelation(camixCA);

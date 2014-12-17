@@ -8,9 +8,9 @@ import Nmea.Vector3;
 import Pseudorange.Measurements;
 
 
-public class Teste3 {
+public class Teste3AnoPassado {
 
-	public Teste3() {		
+	public Teste3AnoPassado() {		
 	}
 	
 	public static void main(String[] args) throws Exception {

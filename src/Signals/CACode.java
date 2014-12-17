@@ -153,7 +153,7 @@ public abstract class CACode {
 			for (int i = 0; i < this.stageNumbers.length; i++) {
 				soma += this.getStageNumbers()[i] * cas.getStageNumbers()[i];
 			}
-			if (soma > 150) {
+			if (soma > 150 || soma < -150) {
 				System.out.println("Soma: " + soma + ";  Deslocacoes para a direita(n+delta): " + numChips + ";  Deslocacoes para a esquerda (n-delta): " + (this.stageNumbers.length - numChips));
 			}
 			if (max < soma) max = soma;

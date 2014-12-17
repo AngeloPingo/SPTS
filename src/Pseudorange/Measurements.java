@@ -14,6 +14,7 @@ public class Measurements {
 	private Vector3D e0sENU;
 	Matrix x = new Matrix(4,1);
 	Matrix h = null;
+	Matrix q = null;
 	Matrix hEnu = null;
 	Matrix z = null;
 	Matrix s = null;
@@ -25,6 +26,11 @@ public class Measurements {
 	}
 	
 	
+	public Matrix getQ() {
+		return q;
+	}
+
+
 	public Vector3D getE0sENU() {
 		return e0sENU;
 	}
@@ -97,8 +103,14 @@ public class Measurements {
 		return x;
 	}
 	
+	public Matrix LeastSquaresWeighted() throws Exception {
+		x = this.h.transpose().times(q).times(this.h).inverse().times(this.h.transpose()).times(q).times(this.z);
+		return x;
+	}
+	
 	public void createMatrixs(int Rows) {
 		h = new Matrix(Rows,4);
+		q = Matrix.identity(h.getNrows());
 		hEnu = new Matrix(Rows,4);
 		z = new Matrix(Rows,1);
 		DirectionCosines = new Matrix(Rows,3);
@@ -113,6 +125,50 @@ public class Measurements {
 			hVector[2] = -1*this.getE0s().getZ();
 			hVector[3] = 1d;
 			h.addVector(hVector, row);
+
+			double[] zVector = new double[1];
+			zVector[0] = ro-this.getE0s().dotProduct(LLHSat);
+			z.addVector(zVector, row);
+			
+			double[] hVectorENU = new double[4];
+			hVectorENU[0] = -1*this.getE0ENU().getX();
+			hVectorENU[1] = -1*this.getE0ENU().getY();
+			hVectorENU[2] = -1*this.getE0ENU().getZ();
+			hVectorENU[3] = 1d;
+			hEnu.addVector(hVectorENU, row);
+			
+			double[] vDirectionCosines = new double[3];
+			vDirectionCosines[0] = this.DirectionCosines().getX();
+			vDirectionCosines[1] = this.DirectionCosines().getY();
+			vDirectionCosines[2] = this.DirectionCosines().getZ();
+			DirectionCosines.addVector(vDirectionCosines, row);
+			
+			double[] vDirectionCosinesENU = new double[3];
+			vDirectionCosinesENU[0] = this.DirectionCosinesENU().getX();
+			vDirectionCosinesENU[1] = this.DirectionCosinesENU().getY();
+			vDirectionCosinesENU[2] = this.DirectionCosinesENU().getZ();
+			DirectionCosinesENU.addVector(vDirectionCosinesENU, row);
+		}
+	}
+	
+	public void measurementMatrixWeighted(int row, double ro, Vector3 LLHSat, double URA) {
+		if (h != null && z != null) {
+			double[] hVector = new double[4];
+			hVector[0] = -1*this.getE0s().getX();
+			hVector[1] = -1*this.getE0s().getY();
+			hVector[2] = -1*this.getE0s().getZ();
+			hVector[3] = 1d;
+			h.addVector(hVector, row);
+
+			double[] qVector = new double[h.getNrows()];
+			for (int i = 0; i<h.getNrows(); i++) {
+				if (i == row) {
+					qVector[i] = URA;
+				} else {
+					qVector[i] = 0;
+				}
+			}
+			q.addVector(qVector, row);
 			
 			double[] zVector = new double[1];
 			zVector[0] = ro-this.getE0s().dotProduct(LLHSat);
